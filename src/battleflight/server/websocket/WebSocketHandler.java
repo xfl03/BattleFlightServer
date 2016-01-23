@@ -33,7 +33,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// TODO Auto-generated method stub
 		if (msg instanceof FullHttpRequest) {
             handleHttpRequest(ctx, (FullHttpRequest) msg);
         } else if (msg instanceof WebSocketFrame) {
@@ -53,6 +52,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
             handshaker.handshake(ctx.channel(), req);
             ctx0=ctx;
             clientID="CLIENT"+mainPool.webSocketPool.clientList.size();
+            System.out.printf("%s joined", clientID);
             mainPool.webSocketPool.clientList.put(clientID,this);
         }
 	}
@@ -80,7 +80,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
         }
         
         String text = ((TextWebSocketFrame) frame).text();
-        System.out.printf("%s received %s%n", ctx.channel(), text);
+        System.out.printf("%s sent %s%n", clientID, text);
         String[] temp0=text.split(",,", 2);
         if (temp0.length!=2){
         	ctx.channel().write(new TextWebSocketFrame("Wrong Pattern"));

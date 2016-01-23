@@ -28,7 +28,7 @@ public class WebSocket implements Runnable {
 
             Channel ch = b.bind(PORT).sync().channel();
 
-            System.out.println("WS Server Opened");
+            System.out.println("WebSocket Server Started");
 
             ch.closeFuture().sync();
         } catch (InterruptedException e) {
