@@ -1,6 +1,8 @@
 package battleflight.server.websocket;
 
+import battleflight.server.exception.TargetNotFoundException;
 import battleflight.server.pool.MainPool;
+import battleflight.server.pool.WebSocketPool;
 import battleflight.server.websocket.subhandler.IWebSocketSubHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -51,8 +53,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
         } else {
             handshaker.handshake(ctx.channel(), req);
             ctx0=ctx;
-            clientID="CLIENT"+mainPool.webSocketPool.clientList.size();
-            System.out.printf("%s joined", clientID);
+            clientID=ClientIDHelper.generate(ctx);
+            System.out.printf("%s joined\r\n", clientID);
             mainPool.webSocketPool.clientList.put(clientID,this);
         }
 	}
@@ -81,17 +83,17 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
         
         String text = ((TextWebSocketFrame) frame).text();
         System.out.printf("%s sent %s%n", clientID, text);
-        String[] temp0=text.split(",,", 2);
+        String[] temp0=text.split(WebSocketPool.SPLIT, 2);
         if (temp0.length!=2){
         	ctx.channel().write(new TextWebSocketFrame("Wrong Pattern"));
         	return;
         }
-        IWebSocketSubHandler handler=mainPool.webSocketPool.handlerList.get(temp0[0]);
-        if(handler==null){
-        	ctx.channel().write(new TextWebSocketFrame("Target Not Found"));
-        	return;
+        try{
+        	IWebSocketSubHandler handler=mainPool.webSocketPool.getHandler(temp0[0]);
+        	handler.handle(mainPool, temp0[1], clientID);
+        }catch(TargetNotFoundException e){
+        	ctx.channel().write(new TextWebSocketFrame(e.getMessage()));
         }
-        handler.handle(mainPool, temp0[1], clientID);
 	}
 	@Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -102,5 +104,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
         cause.printStackTrace();
         ctx.close();
     }
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx){
+		mainPool.webSocketPool.clientList.remove(clientID);
+		System.out.println(clientID+" quited.");
+	}
 	
 }
