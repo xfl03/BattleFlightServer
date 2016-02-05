@@ -4,6 +4,7 @@ import battleflight.server.exception.TargetNotFoundException;
 import battleflight.server.pool.MainPool;
 import battleflight.server.pool.WebSocketPool;
 import battleflight.server.websocket.subhandler.IWebSocketSubHandler;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,6 +28,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	public String clientID;
 	public ChannelHandlerContext ctx0;
 	public WebSocketServerHandshaker handshaker;
+	public String roomNow=null;
 	
 	private MainPool mainPool;
 	public WebSocketHandler(MainPool mainPool){

@@ -16,6 +16,19 @@ public class WayHelper {
 		}
 		return t;
 	}
+	
+	public static String[] generateTargets(int[][] parsedMap, String from, int step){
+		return parseTargets(generate(parsedMap,new Position(from),step),step);
+	}
+	private static String[] parseTargets(ArrayList<Way> w,int step){
+		String[] t=new String[w.size()];
+		for(int i=0;i<w.size();i++){
+			Way t2=w.get(i);
+			t[i]=t2.position.get(step).toString();
+		}
+		return t;
+	}
+	
 	public static ArrayList<Way> generate(int[][] parsedMap, Position from, int step){
 		ArrayList<Way> ways=new ArrayList<Way>();
 		Way w=new Way(from);

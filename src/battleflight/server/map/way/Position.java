@@ -19,9 +19,11 @@ public class Position {
 	public boolean equals(Object obj){
 		if(obj==null)
 			return false;
-		if(!(obj instanceof Position))
-			return false;
-		return toString().equals(((Position)obj).toString());
+		if(obj instanceof String)
+			return toString().equals(obj);
+		if(obj instanceof Position)
+			return equals(((Position)obj).toString());
+		return false;
 	}
 	
 	@Override
