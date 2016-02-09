@@ -29,6 +29,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	public ChannelHandlerContext ctx0;
 	public WebSocketServerHandshaker handshaker;
 	public String roomNow=null;
+	public String name=null;
 	
 	private MainPool mainPool;
 	public WebSocketHandler(MainPool mainPool){

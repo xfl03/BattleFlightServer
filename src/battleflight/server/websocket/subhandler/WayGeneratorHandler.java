@@ -12,7 +12,7 @@ public class WayGeneratorHandler implements IWebSocketSubHandler {
 	@Override
 	public void handle(MainPool mainPool, String text, String sender) {
 		try {
-			Player p=mainPool.getPlayer(sender);
+			Player p=mainPool.getPlayer(sender,true);
 			if(p.lastNum==0)
 				mainPool.webSocketPool.sendMessage(sender, "err", "No Random Num");
 			Chess c=p.getChess(text);

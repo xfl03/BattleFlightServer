@@ -12,6 +12,8 @@ public class Player {
 	public int lastNum=0;
 	public String lastSelectChess=null;
 	public String[] lastTargets=null;
+	public String name=null;
+	public boolean prepared=false;
 	public boolean isInLastTargets(String position){
 		for(int i=0;i<lastTargets.length;i++){
 			if(lastTargets[i].equals(position))

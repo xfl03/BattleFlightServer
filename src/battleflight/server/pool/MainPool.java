@@ -20,25 +20,26 @@ public class MainPool {
 	
 	public HashMap<String,Room> rooms=new HashMap<String,Room>();
 	
-	public Player getPlayer(String clientID) throws Exception{
-		Room r=getRoom(clientID,true);
+	public Player getPlayer(String clientID,boolean sendErr) throws Exception{
+		Room r=getRoom(clientID,true,sendErr);
 		Player p=r.getPlayerByClientID(clientID);
 		if(p==null)
-			throw generatePlayerException(clientID, "User is not in the room");
+			throw generatePlayerException(clientID, "User is not in the room",sendErr);
 		return p;
 	}
-	public Room getRoom(String clientID,boolean checkActive) throws Exception{
+	public Room getRoom(String clientID,boolean checkActive,boolean sendErr) throws Exception{
 		String room=webSocketPool.clientList.get(clientID).roomNow;
 		if(room==null)
-			throw generatePlayerException(clientID,"Not in a room");
+			throw generatePlayerException(clientID,"Not in a room",sendErr);
 		Room r=rooms.get(room);
 		if(r==null||(checkActive&&r.status==0))
-			throw generatePlayerException(clientID,"Room is not avalible");
+			throw generatePlayerException(clientID,"Room is not avalible",sendErr);
 		return r;
 	}
-	private Exception generatePlayerException(String clientID,String reason){
+	private Exception generatePlayerException(String clientID,String reason,boolean sendErr){
 		try {
-			webSocketPool.sendMessage(clientID, "err", reason);
+			if(sendErr)
+				webSocketPool.sendMessage(clientID, "err", reason);
 		} catch (ClientNotFoundException e) {
 			e.printStackTrace();
 			return e;

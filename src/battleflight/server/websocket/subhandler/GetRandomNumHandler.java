@@ -8,7 +8,7 @@ public class GetRandomNumHandler implements IWebSocketSubHandler {
 	@Override
 	public void handle(MainPool mainPool, String text, String sender) {
 		try {
-		Player p=mainPool.getPlayer(sender);
+		Player p=mainPool.getPlayer(sender,true);
 		int temp=getRandom(1,6);
 		p.lastNum=temp;
 		mainPool.webSocketPool.sendMessage(sender, "ran", temp+"");

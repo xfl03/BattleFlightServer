@@ -7,6 +7,7 @@ import battleflight.server.pool.MainPool;
 
 public class Room {
 	public String roomID=null;
+	public String name=null;
 	public Player[] players=new Player[2];
 	public int status=0;//0:Preparing 1:Playing
 	public Player getPlayerByClientID(String clientID){
@@ -56,5 +57,14 @@ public class Room {
 			t.add("win,,"+player.hashID);
 		}
 		return t;
+	}
+	public RoomInfo getRoomInfo(){
+		RoomInfo i=new RoomInfo();
+		i.roomID=roomID;
+		i.status=status;
+		i.roomName=name;
+		i.p1Name=players[0].name;
+		i.p2Name=players[1].name;
+		return i;
 	}
 }
