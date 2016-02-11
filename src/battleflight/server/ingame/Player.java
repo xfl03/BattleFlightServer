@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import battleflight.server.map.way.Position;
 
 public class Player {
-	public String hashID=null;
 	public String clientID;
 	public Chess[] chesses=new Chess[4];
 	public int mode=0;//1:Lost 2:Win

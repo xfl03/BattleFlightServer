@@ -10,6 +10,7 @@ public class Room {
 	public String name=null;
 	public Player[] players=new Player[2];
 	public int status=0;//0:Preparing 1:Playing
+	
 	public Player getPlayerByClientID(String clientID){
 		for(int i=0;i<players.length;i++){
 			if(players[i].clientID==clientID)
@@ -17,6 +18,37 @@ public class Room {
 		}
 		return null;
 	}
+	public boolean isFull(){
+		for(Player p:players){
+			if(p==null)
+				return false;
+		}
+		return true;
+	}
+	public boolean isEmpty(){
+		for(Player p:players){
+			if(p!=null)
+				return false;
+		}
+		return true;
+	}
+	public int joinRoom(Player p){
+		for(int i=0;i<players.length;i++){
+			if(players[i]==null){
+				players[i]=p;
+				return i;
+			}
+		}
+		return -1;
+	}
+	public boolean exitRoom(Player p){
+		for(int i=0;i<players.length;i++){
+			if(players[i]==p){
+				players[i]=null;
+			}
+		}
+		return isEmpty();
+	}	
 	public void sendToAll(MainPool mainPool,String message) throws Exception{
 		for(int i=0;i<players.length;i++){
 			String c=players[i].clientID;
@@ -35,10 +67,10 @@ public class Room {
 			if(c.size()==0)
 				continue;
 			p.removeChessByIndexes(c);
-			t.add("kill,,"+p.hashID+","+targetPosition.toString());
+			t.add("kill,,"+p.clientID+","+targetPosition.toString());
 			if(!p.ifChessRemains()){
 				p.mode=1;
-				t.add("lost,,"+p.hashID);
+				t.add("lost,,"+p.clientID);
 			}
 		}
 		boolean win=false;
@@ -54,17 +86,17 @@ public class Room {
 		}
 		if(win){
 			player.mode=2;
-			t.add("win,,"+player.hashID);
+			t.add("win,,"+player.clientID);
 		}
 		return t;
 	}
-	public RoomInfo getRoomInfo(){
-		RoomInfo i=new RoomInfo();
-		i.roomID=roomID;
-		i.status=status;
-		i.roomName=name;
-		i.p1Name=players[0].name;
-		i.p2Name=players[1].name;
-		return i;
+	public String[] getRoomInfo(){
+		ArrayList<String> s=new ArrayList<String>();
+		s.add(roomID);
+		s.add(status+"");
+		s.add(name);
+		s.add(players[0]==null?"":players[0].name);
+		s.add(players[1]==null?"":players[1].name);
+		return (String[]) s.toArray();
 	}
 }
