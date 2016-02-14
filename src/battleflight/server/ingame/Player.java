@@ -7,7 +7,7 @@ import battleflight.server.map.way.Position;
 public class Player {
 	public String clientID;
 	public Chess[] chesses=new Chess[4];
-	public int mode=0;//1:Lost 2:Win
+	public int mode=0;//1:Lost 2:Win 0:Late 10:Early
 	public int lastNum=0;
 	public String lastSelectChess=null;
 	public String[] lastTargets=null;

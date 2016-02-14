@@ -99,4 +99,15 @@ public class Room {
 		s.add(players[1]==null?"":players[1].name);
 		return (String[]) s.toArray();
 	}
+	public boolean ready(String clientID){
+		Player p= this.getPlayerByClientID(clientID);
+		p.prepared=true;
+		for(int i=0;i<players.length;i++){
+			if(players[i]==null)
+				return false;
+			if(!players[i].prepared)
+				return false;
+		}
+		return true;
+	}
 }
