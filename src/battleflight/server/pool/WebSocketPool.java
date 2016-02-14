@@ -26,6 +26,10 @@ public class WebSocketPool {
 		handlerList.put("name", new NameHandler());
 		handlerList.put("roomrequest", new RoomRequestHandler());
 		handlerList.put("roomch", new RoomChHandler());							//
+		handlerList.put("createroom", new CreateRoomHandler());
+		handlerList.put("waitingready", new WaitingReadyHandler());
+		handlerList.put("waitingexit", new WaitingExitHandler());
+		handlerList.put("roomselect", new RoomSelectHandler());
 	}
 	
 	public WebSocketHandler getClientByName(String name){
